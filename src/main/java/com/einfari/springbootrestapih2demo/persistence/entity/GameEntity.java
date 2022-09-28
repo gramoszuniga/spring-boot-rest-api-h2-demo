@@ -1,4 +1,4 @@
-package com.einfari.springbootrestapih2demo.entities;
+package com.einfari.springbootrestapih2demo.persistence.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,8 +16,8 @@ import javax.persistence.Id;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class Game {
+@Entity(name = "Game")
+public class GameEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
