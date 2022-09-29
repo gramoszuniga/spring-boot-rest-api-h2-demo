@@ -39,6 +39,11 @@ public class GameService {
         );
     }
 
+    public void update(Game game) {
+        GameEntity gameEntity = GameEntityMapper.INSTANCE.map(game);
+        gameRepository.save(gameEntity);
+    }
+
     public void delete(Long id) {
         gameRepository.deleteById(id);
     }

@@ -16,7 +16,7 @@ import javax.persistence.Id;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "Game")
+@Entity(name = "game")
 public class GameEntity {
 
     @Id
