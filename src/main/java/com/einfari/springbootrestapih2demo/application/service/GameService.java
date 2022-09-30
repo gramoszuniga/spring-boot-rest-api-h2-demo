@@ -24,8 +24,7 @@ public class GameService {
     private final GameRepository gameRepository;
 
     public Long create(Game game) {
-        GameEntity gameEntity = GameEntityMapper.INSTANCE.map(game);
-        gameEntity = gameRepository.save(gameEntity);
+        GameEntity gameEntity = gameRepository.save(GameEntityMapper.INSTANCE.map(game));
         return gameEntity.getId();
     }
 
@@ -36,9 +35,10 @@ public class GameService {
 
     public Game read(Long id) {
         Optional<GameEntity> gameEntity = gameRepository.findById(id);
-        return gameEntity.map(GameEntityMapper.INSTANCE::map).orElseThrow(
-                () -> new ResourceNotFoundException(GAME_NOT_FOUND)
-        );
+        if (gameEntity.isEmpty()) {
+            throw new ResourceNotFoundException(GAME_NOT_FOUND);
+        }
+        return GameEntityMapper.INSTANCE.map(gameEntity.get());
     }
 
     public void update(Game game) {
