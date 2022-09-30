@@ -1,6 +1,7 @@
 package com.einfari.springbootrestapih2demo.application.service;
 
 import com.einfari.springbootrestapih2demo.application.model.Game;
+import com.einfari.springbootrestapih2demo.common.error.ResourceNotFoundException;
 import com.einfari.springbootrestapih2demo.persistence.entity.GameEntity;
 import com.einfari.springbootrestapih2demo.persistence.mapper.GameEntityMapper;
 import com.einfari.springbootrestapih2demo.persistence.repository.GameRepository;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 @Service
 public class GameService {
 
+    private static final String GAME_NOT_FOUND = "Game not found.";
     private final GameRepository gameRepository;
 
     public Long create(Game game) {
@@ -35,16 +37,23 @@ public class GameService {
     public Game read(Long id) {
         Optional<GameEntity> gameEntity = gameRepository.findById(id);
         return gameEntity.map(GameEntityMapper.INSTANCE::map).orElseThrow(
-                () -> new RuntimeException("Game not found.")
+                () -> new ResourceNotFoundException(GAME_NOT_FOUND)
         );
     }
 
     public void update(Game game) {
-        GameEntity gameEntity = GameEntityMapper.INSTANCE.map(game);
-        gameRepository.save(gameEntity);
+        Optional<GameEntity> gameEntity = gameRepository.findById(game.getId());
+        if (gameEntity.isEmpty()) {
+            throw new ResourceNotFoundException(GAME_NOT_FOUND);
+        }
+        gameRepository.save(GameEntityMapper.INSTANCE.map(game));
     }
 
     public void delete(Long id) {
+        Optional<GameEntity> gameEntity = gameRepository.findById(id);
+        if (gameEntity.isEmpty()) {
+            throw new ResourceNotFoundException(GAME_NOT_FOUND);
+        }
         gameRepository.deleteById(id);
     }
 

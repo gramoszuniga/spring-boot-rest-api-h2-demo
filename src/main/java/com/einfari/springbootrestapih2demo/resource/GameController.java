@@ -25,7 +25,7 @@ import java.util.List;
 @RequestMapping("/v1")
 public class GameController {
 
-    private GameService gameService;
+    private final GameService gameService;
 
     @GetMapping("/games")
     private ResponseEntity<Games> getAll() {
