@@ -28,26 +28,26 @@ public class GameController {
     private final GameService gameService;
 
     @GetMapping("/games")
-    private ResponseEntity<Games> getAll() {
+    public ResponseEntity<Games> getAll() {
         List<Game> gameList = gameService.readAll();
         return new ResponseEntity<>(new Games(gameList), HttpStatus.OK);
     }
 
     @PostMapping("/games")
-    private ResponseEntity<GameResponse> add(@RequestBody @Valid GameRequest gameRequest) {
+    public ResponseEntity<GameResponse> add(@RequestBody @Valid GameRequest gameRequest) {
         Game game = GameRequestMapper.INSTANCE.map(gameRequest);
         Long id = gameService.create(game);
         return new ResponseEntity<>(new GameResponse(id), HttpStatus.CREATED);
     }
 
     @GetMapping("/games/{id}")
-    private ResponseEntity<Game> get(@PathVariable @NonNull Long id) {
+    public ResponseEntity<Game> get(@PathVariable @NonNull Long id) {
         Game game = gameService.read(id);
         return new ResponseEntity<>(game, HttpStatus.OK);
     }
 
     @PutMapping("/games/{id}")
-    private ResponseEntity<Void> put(@PathVariable @NonNull Long id, @RequestBody @Valid GameRequest gameRequest) {
+    public ResponseEntity<Void> put(@PathVariable @NonNull Long id, @RequestBody @Valid GameRequest gameRequest) {
         Game game = GameRequestMapper.INSTANCE.map(gameRequest);
         game.setId(id);
         gameService.update(game);
@@ -55,7 +55,7 @@ public class GameController {
     }
 
     @DeleteMapping("/games/{id}")
-    private ResponseEntity<Void> delete(@PathVariable @NonNull Long id) {
+    public ResponseEntity<Void> delete(@PathVariable @NonNull Long id) {
         gameService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
