@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
  * @author : Gonzalo Ramos Zúñiga
  * @since : 2022-09-28
  **/
+@SuppressWarnings("unused")
 @Repository
 public interface GameRepository extends JpaRepository<GameEntity, Long> {
 

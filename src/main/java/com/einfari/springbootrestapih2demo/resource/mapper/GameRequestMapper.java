@@ -14,8 +14,6 @@ public interface GameRequestMapper {
 
     GameRequestMapper INSTANCE = Mappers.getMapper(GameRequestMapper.class);
 
-    GameRequest map(Game game);
-
     Game map(GameRequest gameRequest);
 
 }

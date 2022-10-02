@@ -35,8 +35,7 @@ public class GameController {
 
     @PostMapping("/games")
     public ResponseEntity<GameResponse> add(@RequestBody @Valid GameRequest gameRequest) {
-        Game game = GameRequestMapper.INSTANCE.map(gameRequest);
-        Long id = gameService.create(game);
+        Long id = gameService.create(GameRequestMapper.INSTANCE.map(gameRequest));
         return new ResponseEntity<>(new GameResponse(id), HttpStatus.CREATED);
     }
 
