@@ -45,13 +45,14 @@ class GameServiceTest {
         GameEntity gameEntity = new GameEntity(1027L, "92", "Unreal Tournament (1999)", "PC", "Nov 30, 1999", "9.0",
                 "/game/pc/unreal-tournament-1999", "M");
         ArgumentCaptor<GameEntity> gameArgumentCaptor = ArgumentCaptor.forClass(GameEntity.class);
+        Long expected = gameEntity.getId();
 
         when(gameRepository.save(GameEntityMapper.INSTANCE.map(game))).thenReturn(gameEntity);
-        Long id = gameService.create(game);
+        Long actual = gameService.create(game);
 
         verify(gameRepository).save(gameArgumentCaptor.capture());
         assertThat(gameArgumentCaptor.getValue()).isEqualTo(GameEntityMapper.INSTANCE.map(game));
-        assertThat(id).isEqualTo(gameEntity.getId());
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -62,38 +63,40 @@ class GameServiceTest {
                 new GameEntity(994L, "92", "Banjo-Kazooie", "N64", "May 31, 1998", "9.1",
                         "/game/nintendo-64/banjo-kazooie", "E")
         );
+        List<Game> expected = gameEntityList.stream().map(GameEntityMapper.INSTANCE::map).collect(Collectors
+                .toList());
 
         when(gameRepository.findAll()).thenReturn(gameEntityList);
         List<Game> gameList = gameService.readAll();
 
-        assertThat(gameList).isEqualTo(gameEntityList.stream().map(GameEntityMapper.INSTANCE::map).collect(Collectors
-                .toList()));
+        assertThat(gameList).isEqualTo(expected);
     }
 
     @Test
     void canReadEmpty() {
         List<GameEntity> gameEntityList = new ArrayList<>();
+        List<Game> expected = new ArrayList<>();
 
         when(gameRepository.findAll()).thenReturn(gameEntityList);
         List<Game> gameList = gameService.readAll();
 
-        assertThat(gameList).isEqualTo(gameEntityList.stream().map(GameEntityMapper.INSTANCE::map).collect(Collectors
-                .toList()));
+        assertThat(gameList).isEqualTo(expected);
     }
 
     @Test
     void canRead() {
         Long id = 992L;
-        Optional<GameEntity> gameEntity = Optional.of(new GameEntity(992L, "99", "The Legend of Zelda: Ocarina of Time",
+        Optional<GameEntity> gameEntity = Optional.of(new GameEntity(id, "99", "The Legend of Zelda: Ocarina of Time",
                 "N64", "Nov 23, 1998", "9.1", "/game/nintendo-64/the-legend-of-zelda-ocarina-of-time", "E"));
         ArgumentCaptor<Long> longArgumentCaptor = ArgumentCaptor.forClass(Long.class);
+        Game expected = GameEntityMapper.INSTANCE.map(gameEntity.get());
 
         when(gameRepository.findById(id)).thenReturn(gameEntity);
-        Game game = gameService.read(id);
+        Game actual = gameService.read(id);
 
         verify(gameRepository).findById(longArgumentCaptor.capture());
         assertThat(longArgumentCaptor.getValue()).isEqualTo(id);
-        assertThat(game).isEqualTo(GameEntityMapper.INSTANCE.map(gameEntity.get()));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -139,7 +142,7 @@ class GameServiceTest {
                 .hasMessageContaining(GAME_NOT_FOUND);
         verify(gameRepository).findById(longArgumentCaptor.capture());
         assertThat(longArgumentCaptor.getValue()).isEqualTo(game.getId());
-        verify(gameRepository, never()).save(GameEntityMapper.INSTANCE.map(game));
+        verify(gameRepository, never()).save(any());
     }
 
     @Test
@@ -169,7 +172,7 @@ class GameServiceTest {
                 .hasMessageContaining(GAME_NOT_FOUND);
         verify(gameRepository).findById(longArgumentCaptor.capture());
         assertThat(longArgumentCaptor.getValue()).isEqualTo(id);
-        verify(gameRepository, never()).deleteById(id);
+        verify(gameRepository, never()).deleteById(any());
     }
 
 }

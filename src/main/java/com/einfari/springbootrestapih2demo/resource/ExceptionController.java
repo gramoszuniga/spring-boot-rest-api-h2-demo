@@ -18,12 +18,12 @@ public class ExceptionController {
     private static final String OOPS_SOMETHING_WENT_WRONG = "Oops, something went wrong.";
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    private ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException error) {
+    public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException error) {
         return new ResponseEntity<>(new ErrorResponse(error.getMessage()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(RuntimeException.class)
-    private ResponseEntity<ErrorResponse> handleRuntime(RuntimeException error) {
+    public ResponseEntity<ErrorResponse> handleRuntime(RuntimeException error) {
         return new ResponseEntity<>(new ErrorResponse(OOPS_SOMETHING_WENT_WRONG), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
