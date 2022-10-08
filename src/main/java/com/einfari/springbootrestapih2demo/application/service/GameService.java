@@ -62,7 +62,8 @@ public class GameService {
         }
         try {
             JsonNode jsonNode = jsonPatch.apply(objectMapper.convertValue(gameEntity.get(), JsonNode.class));
-            gameRepository.save(objectMapper.treeToValue(jsonNode, GameEntity.class));
+            gameEntity = Optional.of(objectMapper.treeToValue(jsonNode, GameEntity.class));
+            gameRepository.save(gameEntity.get());
         } catch (JsonPatchException | JsonProcessingException e) {
             throw new RuntimeException(e);
         }
