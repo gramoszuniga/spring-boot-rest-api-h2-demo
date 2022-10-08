@@ -6,6 +6,10 @@ import com.einfari.springbootrestapih2demo.application.service.GameService;
 import com.einfari.springbootrestapih2demo.resource.mapper.GameRequestMapper;
 import com.einfari.springbootrestapih2demo.resource.model.GameRequest;
 import com.einfari.springbootrestapih2demo.resource.model.GameResponse;
+import com.fasterxml.jackson.databind.node.TextNode;
+import com.github.fge.jackson.jsonpointer.JsonPointer;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.ReplaceOperation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -94,6 +99,32 @@ class GameControllerTest {
 
         verify(gameService).read(longArgumentCaptor.capture());
         assertThat(longArgumentCaptor.getValue()).isEqualTo(id);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void canPatch() {
+        Long id = 1023L;
+        JsonPatch jsonPatch = new JsonPatch(Arrays.asList(
+                new ReplaceOperation(
+                        JsonPointer.of("title"), new TextNode("The Legend of Zelda: Tears of the Kingdom")
+                ),
+                new ReplaceOperation(
+                        JsonPointer.of("date"), new TextNode("May 12, 2023")
+                ),
+                new ReplaceOperation(
+                        JsonPointer.of("link"), new TextNode("/game/switch/the-legend-of-zelda-tears-of-the-kingdom")
+                ))
+        );
+        ArgumentCaptor<Long> longArgumentCaptor = ArgumentCaptor.forClass(Long.class);
+        ArgumentCaptor<JsonPatch> jsonPatchArgumentCaptor = ArgumentCaptor.forClass(JsonPatch.class);
+        ResponseEntity<Object> expected = new ResponseEntity<>(HttpStatus.OK);
+
+        ResponseEntity<Void> actual = gameController.patch(id, jsonPatch);
+
+        verify(gameService).updatePartial(longArgumentCaptor.capture(), jsonPatchArgumentCaptor.capture());
+        assertThat(longArgumentCaptor.getValue()).isEqualTo(id);
+        assertThat(jsonPatchArgumentCaptor.getValue()).isEqualTo(jsonPatch);
         assertThat(actual).isEqualTo(expected);
     }
 
