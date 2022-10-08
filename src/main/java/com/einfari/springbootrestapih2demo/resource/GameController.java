@@ -6,6 +6,7 @@ import com.einfari.springbootrestapih2demo.application.service.GameService;
 import com.einfari.springbootrestapih2demo.resource.mapper.GameRequestMapper;
 import com.einfari.springbootrestapih2demo.resource.model.GameRequest;
 import com.einfari.springbootrestapih2demo.resource.model.GameResponse;
+import com.github.fge.jsonpatch.JsonPatch;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,12 @@ public class GameController {
     public ResponseEntity<Game> get(@PathVariable @NonNull Long id) {
         Game game = gameService.read(id);
         return new ResponseEntity<>(game, HttpStatus.OK);
+    }
+
+    @PatchMapping(path = "/games/{id}", consumes = "application/json-patch+json")
+    public ResponseEntity<Void> patch(@PathVariable @NonNull Long id, @RequestBody JsonPatch jsonPatch) {
+        gameService.updatePartial(id, jsonPatch);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/games/{id}")
