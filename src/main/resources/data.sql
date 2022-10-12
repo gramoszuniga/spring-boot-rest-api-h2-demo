@@ -5,6 +5,9 @@
 -- Source:      https://github.com/yaylinda/nintendo-games-ratings
 -- ===============================================================
 
+INSERT INTO `user`(username,password) VALUES
+('username','$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6');
+
 INSERT INTO game(meta_score,title,platform,date,user_score,link,esrb_rating) VALUES
 (NULL,'Super Mario 3D World + Bowser''s Fury','Switch','Feb 12, 2021',NULL,'/game/switch/super-mario-3d-world-+-bowsers-fury',NULL),
 (NULL,'Super Smash Bros. Ultimate: Sephiroth','Switch','Dec 22, 2020',NULL,'/game/switch/super-smash-bros-ultimate-sephiroth',NULL),

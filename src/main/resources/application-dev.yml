@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:nintendo
+    url: jdbc:h2:mem:nintendo;DATABASE_TO_UPPER=false
   jpa:
     defer-datasource-initialization: true
   h2:
