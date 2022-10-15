@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  **/
 class ExceptionControllerTest {
 
+    public static final String BAD_CREDENTIALS = "Bad credentials.";
     private ExceptionController exceptionController;
 
     @BeforeEach
@@ -30,6 +31,30 @@ class ExceptionControllerTest {
         );
 
         ResponseEntity<ErrorResponse> actual = exceptionController.handleResourceNotFound(resourceNotFoundException);
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void canHandleUsernameNotFound() {
+        RuntimeException runtimeException = new RuntimeException();
+        ResponseEntity<ErrorResponse> expected = new ResponseEntity<>(
+                new ErrorResponse(BAD_CREDENTIALS), HttpStatus.BAD_REQUEST
+        );
+
+        ResponseEntity<ErrorResponse> actual = exceptionController.handleUsernameNotFound(runtimeException);
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void canHandleBadCredentials() {
+        RuntimeException runtimeException = new RuntimeException();
+        ResponseEntity<ErrorResponse> expected = new ResponseEntity<>(
+                new ErrorResponse(BAD_CREDENTIALS), HttpStatus.BAD_REQUEST
+        );
+
+        ResponseEntity<ErrorResponse> actual = exceptionController.handleBadCredentials(runtimeException);
 
         assertThat(actual).isEqualTo(expected);
     }
