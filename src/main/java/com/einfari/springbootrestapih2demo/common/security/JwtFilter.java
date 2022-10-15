@@ -2,6 +2,7 @@ package com.einfari.springbootrestapih2demo.common.security;
 
 import com.einfari.springbootrestapih2demo.application.service.JwtUserDetailsService;
 import lombok.AllArgsConstructor;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,8 +32,9 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtUserDetailsService jwtUserDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         if (ObjectUtils.isEmpty(authorizationHeader) || !authorizationHeader.startsWith(BEARER)) {
             filterChain.doFilter(request, response);
