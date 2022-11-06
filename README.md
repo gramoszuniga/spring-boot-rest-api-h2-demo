@@ -6,7 +6,7 @@ Demo project for a CRUD RESTful web API compliant with the OpenAPI Specification
 
 ## Tech Stack
 
-**Server:** Java 17, H2, JPA, Lombok, Spring Boot
+**Server:** Java 17, H2, JJWT, JPA, JSON Patch, Lombok, MapStruct, Spring Boot
 
 
 ## API Reference
