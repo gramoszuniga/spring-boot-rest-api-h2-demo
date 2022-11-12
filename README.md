@@ -41,6 +41,13 @@ Start the server
   java -jar target/spring-boot-rest-api-h2-demo-1.0.0.jar
 ```
 
+Or use docker
+
+```bash
+  docker build -t spring-boot-rest-api-h2-demo/latest .
+  docker run -p 8080:8080 spring-boot-rest-api-h2-demo/latest
+```
+
 
 ## Acknowledgements
 
